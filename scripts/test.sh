@@ -1,0 +1,46 @@
+#!/bin/bash
+# Score the two-seed DeepDOSReasoner ensemble on the test split of one benchmark.
+#
+#   bash scripts/test.sh <edos|edos_stable|phdos> [seed_a seed_b [test.py options]]
+#   sbatch [-p ... --qos ...] scripts/test.sh ...              (from the repository root)
+#
+# Seeds default to 1 and 4; both Stage I and Stage II checkpoints of each seed
+# must exist under TRAINED/. Prints R2, MAE, MSE and WD.
+#SBATCH -J ddr_test
+#SBATCH -o %x-%j.out
+#SBATCH -e %x-%j.err
+#SBATCH -N 1 -n 1 -c 16
+#SBATCH --mem=32G
+#SBATCH -t 4:00:00
+#SBATCH -G 1
+
+set -euo pipefail
+if [[ $# -lt 1 ]]; then
+    echo "Usage: $0 <benchmark> [seed_a seed_b [extra args]]" >&2
+    exit 1
+fi
+
+source "$(dirname "$0")/common.sh" 2>/dev/null || source "${SLURM_SUBMIT_DIR:?}/scripts/common.sh"
+cd_repo_root "$0"
+
+BENCH=$1
+SEED_A=${2:-1}
+SEED_B=${3:-4}
+shift $(( $# < 3 ? $# : 3 ))
+set_benchmark "$BENCH"
+
+python test.py \
+    --data_src "$DATA_SRC" \
+    --label_dim "$LABEL_DIM" \
+    --scaling_law 1.0 \
+    --batch-size 128 \
+    --d_model 512 \
+    --dec_dropout 0.0 \
+    --dec_layers 6 \
+    --h 8 \
+    --k_steps 5 \
+    --stage1_ckpt_1 "${BENCH}_stage1_seed${SEED_A}" \
+    --stage2_ckpt_1 "${BENCH}_stage2_seed${SEED_A}" \
+    --stage1_ckpt_2 "${BENCH}_stage1_seed${SEED_B}" \
+    --stage2_ckpt_2 "${BENCH}_stage2_seed${SEED_B}" \
+    "$@"

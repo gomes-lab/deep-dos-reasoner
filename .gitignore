@@ -1,1 +1,21 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
 .DS_Store
+._*
+
+# Prepared crystal graphs: download with scripts/download_data.sh
+data/*/graphs/
+data/*/graphs.tar.gz
+data/SHA256SUMS
+
+# Training outputs
+TRAINED/
+summary/
+*.log
+
+# Slurm logs (written to the repository root)
+ddr_*-*.out
+ddr_*-*.err

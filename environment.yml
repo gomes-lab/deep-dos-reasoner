@@ -1,0 +1,31 @@
+# Conda environment for DeepDOSReasoner (Linux x86_64, NVIDIA GPU).
+#   CONDA_CHANNEL_PRIORITY=flexible conda env create -f environment.yml
+#   conda activate ddr
+#   python scripts/check_env.py
+# PyTorch 2.5.1 + CUDA 12.4 needs a driver for CUDA >= 12.0 and a GPU of compute
+# capability sm_50-sm_90 (e.g. V100, A100, H100).
+name: ddr
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+  - nodefaults          # ignore channels configured in ~/.condarc
+dependencies:
+  - python=3.12.7
+  - pip=24.2
+  - pytorch=2.5.1=*cuda12.4*   # force the CUDA build
+  - pytorch-cuda=12.4
+  - mkl=2023.1.0               # MKL release the pytorch-channel build is linked against
+  - conda-forge::sympy=1.13.1  # version required by this PyTorch build
+  - numpy=2.2.5=py312h2470af2_0   # defaults build on MKL 2023.1 (avoids a reference-BLAS numpy)
+  - setuptools<82              # tensorboard 2.18 still imports pkg_resources
+  - pip:
+      - --find-links https://data.pyg.org/whl/torch-2.5.1+cu124.html
+      - torch-geometric==2.6.1
+      - torch-scatter==2.1.2+pt25cu124
+      - pandas==2.2.3
+      - scipy==1.14.1
+      - scikit-learn==1.6.0
+      - pymatgen==2024.11.13
+      - tqdm==4.67.1
+      - tensorboard==2.18.0

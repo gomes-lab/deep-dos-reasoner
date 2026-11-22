@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper below."
+title: "DeepDOSReasoner"
+type: software
+license: MIT
+repository-code: "https://github.com/gomes-lab/deep-dos-reasoner"
+url: "https://gomes-lab.github.io/deepdosreasoner-demo/"
+authors: &authors
+  - family-names: Wang
+    given-names: Yingheng
+  - family-names: Ricci
+    given-names: Francesco
+  - family-names: Wang
+    given-names: Zhilong
+  - family-names: Yu
+    given-names: Tao
+  - family-names: Bai
+    given-names: Junwen
+  - family-names: Lei
+    given-names: Xiangyun
+  - family-names: Kong
+    given-names: Shufeng
+  - family-names: You
+    given-names: Fengqi
+  - family-names: Gregoire
+    given-names: John M.
+  - family-names: Gomes
+    given-names: Carla P.
+preferred-citation:
+  type: article
+  title: "DeepDOSReasoner: Physics-grounded reasoning for density-of-states prediction and materials discovery"
+  authors: *authors
+  year: 2026
